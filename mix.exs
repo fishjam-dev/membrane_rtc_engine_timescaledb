@@ -1,12 +1,12 @@
-defmodule Membrane.Template.Mixfile do
+defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
-  @github_url "https://github.com/membraneframework/membrane_template_plugin"
+  @github_url "https://github.com/membraneframework/membrane_rtc_engine_timescaledb"
 
   def project do
     [
-      app: :membrane_template_plugin,
+      app: :membrane_rtc_engine_timescaledb,
       version: @version,
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -28,6 +28,7 @@ defmodule Membrane.Template.Mixfile do
 
   def application do
     [
+      mod: {Membrane.RTC.Engine.TimescaleDB.App, []},
       extra_applications: []
     ]
   end
@@ -37,7 +38,8 @@ defmodule Membrane.Template.Mixfile do
 
   defp deps do
     [
-      {:membrane_core, "~> 0.10.0"},
+      {:ecto_sql, "~> 3.7"},
+      {:membrane_rtc_engine, path: "../membrane_rtc_engine"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: :dev, runtime: false}
