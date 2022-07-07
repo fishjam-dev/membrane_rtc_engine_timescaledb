@@ -25,7 +25,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
           Enum.split_with(peer_report, fn {key, _value} -> is_atom(key) end)
 
         %{peer_id: peer_id, room_id: room_id, time: NaiveDateTime.utc_now()}
-        |> insert_peer_to_room()
+        |> upsert_peer_to_room()
 
         Map.new([peer_id: peer_id, time: NaiveDateTime.utc_now()] ++ peer_metrics)
         |> update_if_exists(:"peer.metadata", &inspect/1)
@@ -33,7 +33,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
 
         for {{:track_id, track_id}, track_report} <- tracks_reports do
           %{track_id: track_id, peer_id: peer_id, time: NaiveDateTime.utc_now()}
-          |> insert_track_to_peer()
+          |> upsert_track_to_peer()
 
           Map.merge(track_report, %{track_id: track_id, time: NaiveDateTime.utc_now()})
           |> update_if_exists(:"track.metadata", &inspect/1)
@@ -79,15 +79,48 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
     |> Repo.insert()
   end
 
-  defp insert_peer_to_room(peer_to_room) do
-    %PeerToRoom{}
-    |> PeerToRoom.changeset(peer_to_room)
-    |> Repo.insert()
+  defp upsert_peer_to_room(peer_to_room) do
+    insert_result =
+      %PeerToRoom{}
+      |> PeerToRoom.changeset(peer_to_room)
+      |> Repo.insert()
+
+    with {:error, changeset} <- insert_result,
+         true <- contains_unique_contraint_error(changeset) do
+      %{
+        peer_id: peer_id,
+        room_id: room_id,
+        time: time
+      } = peer_to_room
+
+      where(PeerToRoom, peer_id: ^peer_id, room_id: ^room_id)
+      |> Repo.update_all(set: [time: time])
+    end
   end
 
-  defp insert_track_to_peer(track_to_peer) do
-    %TrackToPeer{}
-    |> TrackToPeer.changeset(track_to_peer)
-    |> Repo.insert()
+  defp upsert_track_to_peer(track_to_peer) do
+    insert_result =
+      %TrackToPeer{}
+      |> TrackToPeer.changeset(track_to_peer)
+      |> Repo.insert()
+
+    with {:error, changeset} <- insert_result,
+         true <- contains_unique_contraint_error(changeset) do
+      %{
+        peer_id: peer_id,
+        track_id: track_id,
+        time: time
+      } = track_to_peer
+
+      where(TrackToPeer, peer_id: ^peer_id, track_id: ^track_id)
+      |> Repo.update_all(set: [time: time])
+    end
+  end
+
+  defp contains_unique_contraint_error(changeset) do
+    Enum.any?(
+      changeset.errors,
+      &match?({_field, {_msg, [{:constraint, :unique} | _tail]}}, &1)
+    )
   end
 end
