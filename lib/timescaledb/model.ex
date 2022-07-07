@@ -5,8 +5,8 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
 
   alias Membrane.RTC.Engine.TimescaleDB.Model.{
     PeerMetrics,
-    TrackMetrics,
     PeerToRoom,
+    TrackMetrics,
     TrackToPeer
   }
 
