@@ -1,4 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackToPeer do
+  @moduledoc """
+  Model representing relation between peer and its tracks in `Membrane.RTC.Engine`.
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset

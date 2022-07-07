@@ -1,4 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
+  @moduledoc """
+  Worker responsible for inserting data to database and deleting data from it
+  """
+
   use GenServer
 
   alias Membrane.RTC.Engine.TimescaleDB.Model

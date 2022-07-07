@@ -1,4 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
+  @moduledoc """
+  Model representing set of track metrics from `Membrane.RTC.Engine` metrics report.
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset

@@ -1,4 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerToRoom do
+  @moduledoc """
+  Model representing relation between room and its peers in `Membrane.RTC.Engine`.
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset
