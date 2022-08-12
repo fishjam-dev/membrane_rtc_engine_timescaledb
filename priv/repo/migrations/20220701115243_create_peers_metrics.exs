@@ -7,7 +7,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Repo.Migrations.CreatePeersMetrics do
     create table(:peers_metrics, primary_key: false) do
       add(:time, :naive_datetime_usec, null: false)
       add(:peer_id, :string, null: false)
-      add(:"peer.metadata", :string)
       add(:"ice.binding_requests_received", :integer)
       add(:"ice.binding_responses_sent", :integer)
       add(:"ice.bytes_received", :integer)

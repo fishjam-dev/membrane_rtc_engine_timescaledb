@@ -7,7 +7,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Repo.Migrations.CreateTracksMetrics do
     create table(:tracks_metrics, primary_key: false) do
       add(:time, :naive_datetime_usec, null: false)
       add(:track_id, :string, null: false)
-      add(:"track.metadata", :string)
       add(:"inbound-rtp.encoding", :string)
       add(:"inbound-rtp.ssrc", :string)
       add(:"inbound-rtp.bytes_received", :integer)

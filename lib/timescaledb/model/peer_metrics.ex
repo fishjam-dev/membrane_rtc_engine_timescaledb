@@ -10,7 +10,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
   @type t :: %__MODULE__{
           time: NaiveDateTime.t() | nil,
           peer_id: String.t() | nil,
-          "peer.metadata": String.t() | nil,
           "ice.binding_requests_received": non_neg_integer() | nil,
           "ice.binding_responses_sent": non_neg_integer() | nil,
           "ice.bytes_received": non_neg_integer() | nil,
@@ -24,7 +23,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
     field(:time, :naive_datetime_usec)
     field(:peer_id, :string)
 
-    field(:"peer.metadata", :string)
     field(:"ice.binding_requests_received", :integer)
     field(:"ice.binding_responses_sent", :integer)
     field(:"ice.bytes_received", :integer)
@@ -40,7 +38,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
     casted_fields =
       required_fields ++
         [
-          :"peer.metadata",
           :"ice.binding_requests_received",
           :"ice.binding_responses_sent",
           :"ice.bytes_received",

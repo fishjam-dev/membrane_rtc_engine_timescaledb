@@ -28,7 +28,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
         |> upsert_peer_to_room()
 
         Map.new([peer_id: peer_id, time: NaiveDateTime.utc_now()] ++ peer_metrics)
-        |> update_if_exists(:"peer.metadata", &inspect/1)
         |> insert_peer_metrics()
 
         for {{:track_id, track_id}, track_report} <- tracks_reports do
@@ -36,7 +35,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
           |> upsert_track_to_peer()
 
           Map.merge(track_report, %{track_id: track_id, time: NaiveDateTime.utc_now()})
-          |> update_if_exists(:"track.metadata", &inspect/1)
           |> update_if_exists(:"inbound-rtp.ssrc", &inspect/1)
           |> update_if_exists(:"inbound-rtp.encoding", &Atom.to_string/1)
           |> insert_track_metrics()

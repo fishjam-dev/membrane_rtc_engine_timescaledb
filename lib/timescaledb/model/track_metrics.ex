@@ -10,7 +10,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
   @type t :: %__MODULE__{
           time: NaiveDateTime.t() | nil,
           track_id: String.t() | nil,
-          "track.metadata": String.t() | nil,
           "inbound-rtp.encoding": non_neg_integer() | nil,
           "inbound-rtp.ssrc": non_neg_integer() | nil,
           "inbound-rtp.bytes_received": non_neg_integer() | nil,
@@ -25,7 +24,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     field(:time, :naive_datetime_usec)
     field(:track_id, :string)
 
-    field(:"track.metadata", :string)
     field(:"inbound-rtp.encoding", :string)
     field(:"inbound-rtp.ssrc", :string)
     field(:"inbound-rtp.bytes_received", :integer)
@@ -42,7 +40,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     casted_fields =
       required_fields ++
         [
-          :"track.metadata",
           :"inbound-rtp.encoding",
           :"inbound-rtp.ssrc",
           :"inbound-rtp.bytes_received",
