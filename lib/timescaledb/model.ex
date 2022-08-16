@@ -84,7 +84,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
       |> Repo.insert()
 
     with {:error, changeset} <- insert_result,
-         true <- contains_unique_contraint_error(changeset) do
+         true <- contains_unique_constraint_error(changeset) do
       %{
         peer_id: peer_id,
         room_id: room_id,
@@ -103,7 +103,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
       |> Repo.insert()
 
     with {:error, changeset} <- insert_result,
-         true <- contains_unique_contraint_error(changeset) do
+         true <- contains_unique_constraint_error(changeset) do
       %{
         peer_id: peer_id,
         track_id: track_id,
@@ -115,7 +115,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
     end
   end
 
-  defp contains_unique_contraint_error(changeset) do
+  defp contains_unique_constraint_error(changeset) do
     Enum.any?(
       changeset.errors,
       &match?({_field, {_msg, [{:constraint, :unique} | _tail]}}, &1)

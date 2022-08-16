@@ -20,15 +20,15 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
 
   @primary_key false
   schema "peers_metrics" do
-    field(:time, :naive_datetime_usec)
-    field(:peer_id, :string)
+    field :time, :naive_datetime_usec
+    field :peer_id, :string
 
-    field(:"ice.binding_requests_received", :integer)
-    field(:"ice.binding_responses_sent", :integer)
-    field(:"ice.bytes_received", :integer)
-    field(:"ice.bytes_sent", :integer)
-    field(:"ice.packets_received", :integer)
-    field(:"ice.packets_sent", :integer)
+    field :"ice.binding_requests_received", :integer
+    field :"ice.binding_responses_sent", :integer
+    field :"ice.bytes_received", :integer
+    field :"ice.bytes_sent", :integer
+    field :"ice.packets_received", :integer
+    field :"ice.packets_sent", :integer
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()

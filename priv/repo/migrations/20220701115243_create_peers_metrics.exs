@@ -1,6 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Repo.Migrations.CreatePeersMetrics do
   use Ecto.Migration
 
+  alias Membrane.Telemetry.TimescaleDB.Repo
+
   @chunk_time_interval Application.get_env(:membrane_rtc_engine_timescaledb, Repo)[:chunk_time_interval] || "10 minutes"
 
   def change do

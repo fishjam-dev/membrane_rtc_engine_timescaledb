@@ -17,9 +17,9 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackToPeer do
 
   @primary_key false
   schema "track_to_peer" do
-    field(:time, :naive_datetime_usec)
-    field(:track_id, :string)
-    field(:peer_id, :string)
+    field :time, :naive_datetime_usec
+    field :track_id, :string
+    field :peer_id, :string
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()

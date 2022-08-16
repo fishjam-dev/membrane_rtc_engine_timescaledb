@@ -21,16 +21,16 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
 
   @primary_key false
   schema "tracks_metrics" do
-    field(:time, :naive_datetime_usec)
-    field(:track_id, :string)
+    field :time, :naive_datetime_usec
+    field :track_id, :string
 
-    field(:"inbound-rtp.encoding", :string)
-    field(:"inbound-rtp.ssrc", :string)
-    field(:"inbound-rtp.bytes_received", :integer)
-    field(:"inbound-rtp.keyframe_request_sent", :integer)
-    field(:"inbound-rtp.packets", :integer)
-    field(:"inbound-rtp.frames", :integer)
-    field(:"inbound-rtp.keyframes", :integer)
+    field :"inbound-rtp.encoding", :string
+    field :"inbound-rtp.ssrc", :string
+    field :"inbound-rtp.bytes_received", :integer
+    field :"inbound-rtp.keyframe_request_sent", :integer
+    field :"inbound-rtp.packets", :integer
+    field :"inbound-rtp.frames", :integer
+    field :"inbound-rtp.keyframes", :integer
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()

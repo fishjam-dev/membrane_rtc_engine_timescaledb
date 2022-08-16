@@ -17,9 +17,9 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerToRoom do
 
   @primary_key false
   schema "peer_to_room" do
-    field(:time, :naive_datetime_usec)
-    field(:peer_id, :string)
-    field(:room_id, :string)
+    field :time, :naive_datetime_usec
+    field :peer_id, :string
+    field :room_id, :string
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
