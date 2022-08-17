@@ -7,33 +7,40 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
 
   import Ecto.Changeset
 
+  alias Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics
+
   @type t :: %__MODULE__{
-          time: NaiveDateTime.t() | nil,
-          peer_id: String.t() | nil,
+          id: integer(),
+          peer_id: String.t(),
           "ice.binding_requests_received": non_neg_integer() | nil,
           "ice.binding_responses_sent": non_neg_integer() | nil,
           "ice.bytes_received": non_neg_integer() | nil,
           "ice.bytes_sent": non_neg_integer() | nil,
           "ice.packets_received": non_neg_integer() | nil,
-          "ice.packets_sent": non_neg_integer() | nil
+          "ice.packets_sent": non_neg_integer() | nil,
+          tracks_metrics: [TrackMetrics] | nil,
+          inserted_at: NaiveDateTime.t()
         }
 
-  @primary_key false
+  @primary_key {:id, :id, autogenerate: true}
   schema "peers_metrics" do
-    field :time, :naive_datetime_usec
     field :peer_id, :string
-
+    field :room_id, :string
     field :"ice.binding_requests_received", :integer
     field :"ice.binding_responses_sent", :integer
     field :"ice.bytes_received", :integer
     field :"ice.bytes_sent", :integer
     field :"ice.packets_received", :integer
     field :"ice.packets_sent", :integer
+
+    timestamps(updated_at: false)
+
+    has_many :tracks_metrics, TrackMetrics
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(schema, params) do
-    required_fields = [:time, :peer_id]
+    required_fields = [:peer_id, :room_id]
 
     casted_fields =
       required_fields ++
@@ -48,6 +55,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
 
     schema
     |> cast(params, casted_fields)
+    |> cast_assoc(:tracks_metrics)
     |> validate_required(required_fields)
   end
 end

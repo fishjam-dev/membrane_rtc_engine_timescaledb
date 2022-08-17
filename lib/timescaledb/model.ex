@@ -6,13 +6,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
   import Ecto.Query
 
   alias Membrane.RTC.Engine.TimescaleDB.Repo
-
-  alias Membrane.RTC.Engine.TimescaleDB.Model.{
-    PeerMetrics,
-    PeerToRoom,
-    TrackMetrics,
-    TrackToPeer
-  }
+  alias Membrane.RTC.Engine.TimescaleDB.Model.{PeerMetrics, TrackMetrics}
 
   @doc """
   Takes `Membrane.RTC.Engine.Metrics.rtc_engine_report()` and puts it to database.
@@ -24,21 +18,21 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
         {peer_metrics, tracks_reports} =
           Enum.split_with(peer_report, fn {key, _value} -> is_atom(key) end)
 
-        %{peer_id: peer_id, room_id: room_id, time: NaiveDateTime.utc_now()}
-        |> upsert_peer_to_room()
+        tracks_metrics =
+          Enum.map(tracks_reports, fn {{:track_id, track_id}, report} ->
+            Map.put(report, :track_id, track_id)
+            |> update_if_exists(:"inbound-rtp.ssrc", &inspect/1)
+            |> update_if_exists(:"inbound-rtp.encoding", &Atom.to_string/1)
+          end)
 
-        Map.new([peer_id: peer_id, time: NaiveDateTime.utc_now()] ++ peer_metrics)
+        [
+          peer_id: peer_id,
+          room_id: room_id,
+          tracks_metrics: tracks_metrics
+        ]
+        |> Enum.concat(peer_metrics)
+        |> Map.new()
         |> insert_peer_metrics()
-
-        for {{:track_id, track_id}, track_report} <- tracks_reports do
-          %{track_id: track_id, peer_id: peer_id, time: NaiveDateTime.utc_now()}
-          |> upsert_track_to_peer()
-
-          Map.merge(track_report, %{track_id: track_id, time: NaiveDateTime.utc_now()})
-          |> update_if_exists(:"inbound-rtp.ssrc", &inspect/1)
-          |> update_if_exists(:"inbound-rtp.encoding", &Atom.to_string/1)
-          |> insert_track_metrics()
-        end
       end
     end
 
@@ -52,8 +46,8 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
   """
   @spec remove_outdated_records(non_neg_integer(), String.t()) :: :ok
   def remove_outdated_records(count, interval) do
-    for model <- [PeerMetrics, TrackMetrics, PeerToRoom, TrackToPeer] do
-      from(p in model, where: p.time < ago(^count, ^interval))
+    for model <- [PeerMetrics, TrackMetrics] do
+      from(p in model, where: p.inserted_at < ago(^count, ^interval))
       |> Repo.delete_all()
     end
   end
@@ -69,56 +63,5 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
     %PeerMetrics{}
     |> PeerMetrics.changeset(peer_metrics)
     |> Repo.insert()
-  end
-
-  defp insert_track_metrics(track_metrics) do
-    %TrackMetrics{}
-    |> TrackMetrics.changeset(track_metrics)
-    |> Repo.insert()
-  end
-
-  defp upsert_peer_to_room(peer_to_room) do
-    insert_result =
-      %PeerToRoom{}
-      |> PeerToRoom.changeset(peer_to_room)
-      |> Repo.insert()
-
-    with {:error, changeset} <- insert_result,
-         true <- contains_unique_constraint_error(changeset) do
-      %{
-        peer_id: peer_id,
-        room_id: room_id,
-        time: time
-      } = peer_to_room
-
-      where(PeerToRoom, peer_id: ^peer_id, room_id: ^room_id)
-      |> Repo.update_all(set: [time: time])
-    end
-  end
-
-  defp upsert_track_to_peer(track_to_peer) do
-    insert_result =
-      %TrackToPeer{}
-      |> TrackToPeer.changeset(track_to_peer)
-      |> Repo.insert()
-
-    with {:error, changeset} <- insert_result,
-         true <- contains_unique_constraint_error(changeset) do
-      %{
-        peer_id: peer_id,
-        track_id: track_id,
-        time: time
-      } = track_to_peer
-
-      where(TrackToPeer, peer_id: ^peer_id, track_id: ^track_id)
-      |> Repo.update_all(set: [time: time])
-    end
-  end
-
-  defp contains_unique_constraint_error(changeset) do
-    Enum.any?(
-      changeset.errors,
-      &match?({_field, {_msg, [{:constraint, :unique} | _tail]}}, &1)
-    )
   end
 end
