@@ -7,20 +7,23 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
 
   alias Membrane.RTC.Engine.TimescaleDB.Model
 
-  @type reporter :: pid() | atom()
+  @type reporter() :: pid() | atom()
+  @type option() :: GenServer.option() | {:repo, module()}
+  @type options() :: [option()]
 
-  @spec start(module(), GenServer.options()) :: GenServer.on_start()
-  def start(repo, options \\ []) do
-    do_start(:start, repo, options)
+  @spec start(options()) :: GenServer.on_start()
+  def start(options \\ []) do
+    do_start(:start, options)
   end
 
-  @spec start_link(module(), GenServer.options()) :: GenServer.on_start()
-  def start_link(repo, options \\ []) do
-    do_start(:start_link, repo, options)
+  @spec start_link(options()) :: GenServer.on_start()
+  def start_link(options \\ []) do
+    do_start(:start_link, options)
   end
 
-  defp do_start(function, repo, options) do
-    apply(GenServer, function, [__MODULE__, repo, options])
+  defp do_start(function, options) do
+    {repo, gen_server_options} = Keyword.pop(options, :repo)
+    apply(GenServer, function, [__MODULE__, repo, gen_server_options])
   end
 
   @spec store_report(reporter(), Membrane.RTC.Engine.Metrics.rtc_engine_report()) :: :ok
@@ -31,16 +34,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
   @spec cleanup(reporter(), non_neg_integer(), String.t()) :: :ok
   def cleanup(reporter, count, interval) do
     GenServer.cast(reporter, {:cleanup, count, interval})
-  end
-
-  @spec child_spec(Keyword.t()) :: Supervisor.child_spec()
-  def child_spec(opts) do
-    {repo, process_opts} = Keyword.pop(opts, :repo, nil)
-
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, [repo, process_opts]}
-    }
   end
 
   @impl true
