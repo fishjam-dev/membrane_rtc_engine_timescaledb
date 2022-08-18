@@ -19,7 +19,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
           "ice.packets_received": non_neg_integer() | nil,
           "ice.packets_sent": non_neg_integer() | nil,
           tracks_metrics: [TrackMetrics] | nil,
-          inserted_at: NaiveDateTime.t()
+          inserted_at: DateTime.t()
         }
 
   @primary_key {:id, :id, autogenerate: true}
@@ -33,7 +33,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
     field :"ice.packets_received", :integer
     field :"ice.packets_sent", :integer
 
-    timestamps(updated_at: false)
+    timestamps(type: :utc_datetime_usec, updated_at: false)
 
     has_many :tracks_metrics, TrackMetrics
   end

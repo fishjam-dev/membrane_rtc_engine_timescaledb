@@ -21,7 +21,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
           "inbound-rtp.keyframes": non_neg_integer() | nil,
           peer_metrics_id: :id,
           peer_metrics: PeerMetrics,
-          inserted_at: NaiveDateTime.t()
+          inserted_at: DateTime.t()
         }
 
   @primary_key {:id, :id, autogenerate: true}
@@ -35,7 +35,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     field :"inbound-rtp.frames", :integer
     field :"inbound-rtp.keyframes", :integer
 
-    timestamps(updated_at: false)
+    timestamps(type: :utc_datetime_usec, updated_at: false)
 
     belongs_to :peer_metrics, PeerMetrics
   end

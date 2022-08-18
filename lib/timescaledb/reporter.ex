@@ -9,18 +9,18 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
 
   @type reporter :: pid() | atom()
 
-  @spec start(GenServer.options()) :: GenServer.on_start()
-  def start(options \\ []) do
-    do_start(:start, options)
+  @spec start(module(), GenServer.options()) :: GenServer.on_start()
+  def start(repo, options \\ []) do
+    do_start(:start, repo, options)
   end
 
-  @spec start_link(GenServer.options()) :: GenServer.on_start()
-  def start_link(options \\ []) do
-    do_start(:start_link, options)
+  @spec start_link(module(), GenServer.options()) :: GenServer.on_start()
+  def start_link(repo, options \\ []) do
+    do_start(:start_link, repo, options)
   end
 
-  defp do_start(function, options) do
-    apply(GenServer, function, [__MODULE__, [], options])
+  defp do_start(function, repo, options) do
+    apply(GenServer, function, [__MODULE__, repo, options])
   end
 
   @spec store_report(reporter(), Membrane.RTC.Engine.Metrics.rtc_engine_report()) :: :ok
@@ -34,27 +34,29 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
   end
 
   @spec child_spec(Keyword.t()) :: Supervisor.child_spec()
-  def child_spec(process_opts) do
+  def child_spec(opts) do
+    {repo, process_opts} = Keyword.pop(opts, :repo, nil)
+
     %{
       id: __MODULE__,
-      start: {__MODULE__, :start_link, [process_opts]}
+      start: {__MODULE__, :start_link, [repo, process_opts]}
     }
   end
 
   @impl true
-  def init(_arg) do
-    {:ok, %{}}
+  def init(repo) do
+    {:ok, %{repo: repo}}
   end
 
   @impl true
   def handle_cast({:store_report, report}, state) do
-    Model.insert_report(report)
+    Model.insert_report(state.repo, report)
     {:noreply, state}
   end
 
   @impl true
   def handle_cast({:cleanup, count, interval}, state) do
-    Model.remove_outdated_records(count, interval)
+    Model.remove_outdated_records(state.repo, count, interval)
     {:noreply, state}
   end
 end
