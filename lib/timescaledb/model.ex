@@ -40,7 +40,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
 
   @doc """
   Takes count and interval.
-  Deletes records in database older thant `count` * `interval`.
+  Deletes records in database older than `count` * `interval`.
   `interval` might be `"year"`, `"month"`, `"week"`, `"day"`, `"hour"`, `"minute"`, `"second"`, `"millisecond"` or `"microsecond"`.
   """
   @spec remove_outdated_records(module(), non_neg_integer(), String.t()) :: :ok
