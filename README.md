@@ -1,30 +1,37 @@
-# Membrane Template Plugin
+# 
 
-[![Hex.pm](https://img.shields.io/hexpm/v/membrane_template_plugin.svg)](https://hex.pm/packages/membrane_template_plugin)
-[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_template_plugin)
-[![CircleCI](https://circleci.com/gh/membraneframework/membrane_template_plugin.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_template_plugin)
+[![Hex.pm](https://img.shields.io/hexpm/v/membrane_rtc_engine_timescaledb.svg)](https://hex.pm/packages/membrane_rtc_engine_timescaledb)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_rtc_engine_timescaledb)
+[![CircleCI](https://circleci.com/gh/membraneframework/membrane_rtc_engine_timescaledb.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_rtc_engine_timescaledb)
 
-This repository contains a template for new plugins.
-
-Check out different branches for other flavours of template.
+This repository contains functions, that allows storing `Membrane.RTC.Engine` metrics reports in a database.
 
 It is part of [Membrane Multimedia Framework](https://membraneframework.org).
 
 ## Installation
 
-The package can be installed by adding `membrane_template_plugin` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `membrane_rtc_engine_timescaledb` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:membrane_template_plugin, "~> 0.1.0"}
+    {:membrane_rtc_engine_timescaledb, "~> 0.1.0"}
   ]
 end
 ```
 
 ## Usage
 
-TODO
+To use `Membrane.RTC.Engine.TimescaleDB`, put the following line in your `config` file: 
+```elixir
+config :membrane_rtc_engine_timescaledb, repo: MyApp.Repo, cleanup_interval: 60 * 60, metrics_lifetime: 60 * 60 * 24
+```
+where 
+ * `repo` is a module in your project, that uses `Ecto.Repo`
+ * `cleanup_interval` is the number of seconds between database cleanups 
+ * `metrics_lifetime` is the number of seconds, that says, how old records will be deleted during cleanup
+`:repo` option is required, but `:cleanup_interval` and `:metrics_lifetime` have default values, equal to these in the example line above
+
 
 ## Copyright and License
 

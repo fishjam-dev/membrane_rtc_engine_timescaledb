@@ -35,7 +35,10 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   @impl true
   def init(args) do
     state = Map.new(args)
-    %{cleanup_interval: cleanup_interval, metrics_lifetime: _metrics_lifetime, repo: _repo} = state
+
+    %{cleanup_interval: cleanup_interval, metrics_lifetime: _metrics_lifetime, repo: _repo} =
+      state
+
     send_after_cleanup_interval(cleanup_interval)
 
     {:ok, state}
