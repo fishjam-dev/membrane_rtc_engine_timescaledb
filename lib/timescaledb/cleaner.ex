@@ -52,6 +52,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   end
 
   defp send_after_cleanup_interval(cleanup_interval) do
-    Process.send_after(self(), :cleanup, 10000 * cleanup_interval)
+    Process.send_after(self(), :cleanup, 10_000 * cleanup_interval)
   end
 end
