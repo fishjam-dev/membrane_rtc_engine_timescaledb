@@ -28,7 +28,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
 
   def application do
     [
-      mod: {Membrane.RTC.Engine.TimescaleDB.App, []},
+      mod: {Membrane.RTC.Engine.TimescaleDB.Application, []},
       extra_applications: []
     ]
   end

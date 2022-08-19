@@ -27,13 +27,8 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
   end
 
   @spec store_report(reporter(), Membrane.RTC.Engine.Metrics.rtc_engine_report()) :: :ok
-  def store_report(reporter, report) do
+  def store_report(reporter \\ __MODULE__, report) do
     GenServer.cast(reporter, {:store_report, report})
-  end
-
-  @spec cleanup(reporter(), non_neg_integer(), String.t()) :: :ok
-  def cleanup(reporter, count, interval) do
-    GenServer.cast(reporter, {:cleanup, count, interval})
   end
 
   @impl true
@@ -44,12 +39,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
   @impl true
   def handle_cast({:store_report, report}, state) do
     Model.insert_report(state.repo, report)
-    {:noreply, state}
-  end
-
-  @impl true
-  def handle_cast({:cleanup, count, interval}, state) do
-    Model.remove_outdated_records(state.repo, count, interval)
     {:noreply, state}
   end
 end
