@@ -19,7 +19,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
 
         tracks_metrics =
           Enum.map(tracks_reports, fn {{:track_id, track_id}, report} ->
-            Map.put(report, :track_id, track_id)
+            Map.merge(report, %{track_id: track_id, peer_id: peer_id})
             |> update_if_exists(:"inbound-rtp.ssrc", &inspect/1)
             |> update_if_exists(:"inbound-rtp.encoding", &Atom.to_string/1)
           end)

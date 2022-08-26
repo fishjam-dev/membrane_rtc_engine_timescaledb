@@ -27,6 +27,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
   @primary_key {:id, :id, autogenerate: true}
   schema "tracks_metrics" do
     field :track_id, :string
+    field :peer_id, :string
     field :"inbound-rtp.encoding", :string
     field :"inbound-rtp.ssrc", :string
     field :"inbound-rtp.bytes_received", :integer
@@ -47,6 +48,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     casted_fields =
       required_fields ++
         [
+          :peer_id,
           :peer_metrics_id,
           :"inbound-rtp.encoding",
           :"inbound-rtp.ssrc",
