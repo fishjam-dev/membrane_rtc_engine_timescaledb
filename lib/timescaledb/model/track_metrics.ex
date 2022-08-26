@@ -35,7 +35,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     field :"inbound-rtp.frames", :integer
     field :"inbound-rtp.keyframes", :integer
 
-    timestamps(type: :utc_datetime_usec, updated_at: false)
+    timestamps type: :utc_datetime_usec, updated_at: false
 
     belongs_to :peer_metrics, PeerMetrics
   end
