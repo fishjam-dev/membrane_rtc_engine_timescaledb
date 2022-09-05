@@ -39,6 +39,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
   defp deps do
     [
       {:ecto_sql, "~> 3.7"},
+      {:postgrex, "~> 0.16"},
       {:membrane_rtc_engine, "~> 0.5.1"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},

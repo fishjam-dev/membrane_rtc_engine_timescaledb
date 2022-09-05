@@ -13,6 +13,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
           GenServer.option()
           | {:cleanup_interval, pos_integer()}
           | {:metrics_lifetime, pos_integer()}
+          | {:repo, module()}
   @type options() :: [option()]
 
   @spec start(options()) :: GenServer.on_start()
@@ -32,26 +33,34 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
     apply(GenServer, function, [__MODULE__, reporter_options, gen_server_options])
   end
 
+  @spec stop(cleaner()) :: :ok
+  def stop(cleaner) do
+    GenServer.cast(cleaner, :stop)
+  end
+
   @impl true
-  def init(args) do
-    state = Map.new(args)
+  def init(opts) do
+    state = %{
+      repo: opts[:repo],
+      cleanup_interval_ms:
+        opts[:cleanup_interval] |> Membrane.Time.seconds() |> Membrane.Time.as_milliseconds(),
+      metrics_lifetime: opts[:metrics_lifetime]
+    }
 
-    %{cleanup_interval: cleanup_interval, metrics_lifetime: _metrics_lifetime, repo: _repo} =
-      state
-
-    send_after_cleanup_interval(cleanup_interval)
+    Process.send_after(self(), :cleanup, state.cleanup_interval_ms)
 
     {:ok, state}
   end
 
   @impl true
-  def handle_cast(:cleanup, state) do
-    Model.remove_outdated_records(state.repo, state.metrics_lifetime, "second")
-    send_after_cleanup_interval(state.cleanup_interval)
-    {:noreply, state}
+  def handle_cast(:stop, state) do
+    {:stop, :normal, state}
   end
 
-  defp send_after_cleanup_interval(cleanup_interval) do
-    Process.send_after(self(), :cleanup, 10_000 * cleanup_interval)
+  @impl true
+  def handle_info(:cleanup, state) do
+    Model.remove_outdated_records(state.repo, state.metrics_lifetime, "second")
+    Process.send_after(self(), :cleanup, state.cleanup_interval_ms)
+    {:noreply, state}
   end
 end
