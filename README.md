@@ -31,6 +31,10 @@ where
  * `cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups 
  * `metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
 
+## Running tests
+
+To start tests, you have to run `$ docker-compose up` command, to have a running database docker container. To set up the database before tests, run `$ mix ecto.create && mix ecto.migrate` in second terminal window. Tests can be run with `$ mix test --include long_running` command.
+
 ## Copyright and License
 
 Copyright 2020, [Software Mansion](https://swmansion.com/?utm_source=git&utm_medium=readme&utm_campaign=membrane_template_plugin)
