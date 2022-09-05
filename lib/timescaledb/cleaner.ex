@@ -1,7 +1,7 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   @moduledoc """
   Worker responsible for inserting data to database and deleting data from it.
-  By default started in `Membrane.RTC.Engine.TimescaleDB.Application` module in supervison tree with params passed in application config.
+  By default started in project application module in supervison tree with params passed in application config.
   """
 
   use GenServer

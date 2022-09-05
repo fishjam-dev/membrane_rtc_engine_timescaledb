@@ -2,10 +2,39 @@ version: 2.1
 orbs:
   elixir: membraneframework/elixir@1
 
+jobs:
+  test_with_db:
+    docker:
+      - image: membraneframeworklabs/docker_membrane:latest
+        environment:
+          MIX_ENV: test
+      - image: timescale/timescaledb:2.5.1-pg14
+        command: [-cshared_preload_libraries=timescaledb]
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: membrane_rtc_engine_timescaledb_test  
+    steps:
+      - checkout
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: mix compile --force --warnings-as-errors
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+      - run: # wait for database before starting testing
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: mix ecto.create
+      - run: mix ecto.migrate
+      - run: mix test --include long_running
+
 workflows:
   version: 2
   build:
     jobs:
       - elixir/build_test
-      - elixir/test
       - elixir/lint
+      - test_with_db
