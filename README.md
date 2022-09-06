@@ -27,11 +27,13 @@ To use `Membrane.RTC.Engine.TimescaleDB`, put the following line in your `config
 config :membrane_rtc_engine_timescaledb, repo: MyApp.Repo, cleanup_interval: 60 * 60, metrics_lifetime: 60 * 60 * 24
 ```
 where 
- * `repo` is a module in your project, that uses `Ecto.Repo`
- * `cleanup_interval` is the number of seconds between database cleanups 
- * `metrics_lifetime` is the number of seconds, that says, how old records will be deleted during cleanup
-`:repo` option is required, but `:cleanup_interval` and `:metrics_lifetime` have default values, equal to these in the example line above
+ * `repo` (required) is a module in your project, that uses `Ecto.Repo`
+ * `cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups 
+ * `metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
 
+## Running tests
+
+To start tests, you have to run `$ docker-compose up` command, to have a running database docker container. To set up the database before tests, run `$ mix ecto.create && mix ecto.migrate` in second terminal window. Tests can be run with `$ mix test --include long_running` command.
 
 ## Copyright and License
 

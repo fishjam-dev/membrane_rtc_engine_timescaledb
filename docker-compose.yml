@@ -7,6 +7,4 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=membrane_rtc_engine_timescaledb
-    volumes:
-      - ./postgresql.conf:/opt/bitnami/postgresql/conf/postgresql.conf
+      - POSTGRES_DB=membrane_rtc_engine_timescaledb_test

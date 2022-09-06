@@ -7,7 +7,7 @@ import Config
 config :membrane_rtc_engine_timescaledb, ecto_repos: [Membrane.RTC.Engine.TimescaleDB.Repo]
 
 config :membrane_rtc_engine_timescaledb, Membrane.RTC.Engine.TimescaleDB.Repo,
-  database: "membrane",
+  database: "membrane_rtc_engine_timescaledb_test",
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -15,3 +15,5 @@ config :membrane_rtc_engine_timescaledb, Membrane.RTC.Engine.TimescaleDB.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   chunk_time_interval: "10 minutes",
   chunk_compress_policy_interval: "10 minutes"
+
+config :membrane_rtc_engine_timescaledb, repo: Membrane.RTC.Engine.TimescaleDB.Repo

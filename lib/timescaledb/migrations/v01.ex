@@ -5,7 +5,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
 
   @spec up() :: any()
   def up() do
-    create table(:peers_metrics, primary_key: {:id, :id, autogenerate: true}) do
+    create table(:peers_metrics) do
       add :peer_id, :string, null: false
       add :room_id, :string, null: false
       add :"ice.binding_requests_received", :integer
@@ -18,15 +18,15 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
       timestamps type: :utc_datetime_usec, updated_at: false
     end
 
-    create(index(:peers_metrics, [:inserted_at]))
-    create(index(:peers_metrics, [:peer_id]))
-    create(index(:peers_metrics, [:inserted_at, :peer_id]))
+    create index(:peers_metrics, [:inserted_at])
+    create index(:peers_metrics, [:peer_id])
+    create index(:peers_metrics, [:inserted_at, :peer_id])
 
     flush()
 
-    create table(:tracks_metrics, primary_key: {:id, :id, autogenerate: true}) do
+    create table(:tracks_metrics) do
       add :track_id, :string, null: false
-      add :peer_metrics_id, references(:peers_metrics)
+      add :peer_metrics_id, references(:peers_metrics, on_delete: :delete_all, on_update: :update_all)
       add :peer_id, :string
       add :"inbound-rtp.encoding", :string
       add :"inbound-rtp.ssrc", :string
@@ -36,12 +36,12 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
       add :"inbound-rtp.frames", :integer
       add :"inbound-rtp.keyframes", :integer
 
-      timestamps(type: :utc_datetime_usec, updated_at: false)
+      timestamps type: :utc_datetime_usec, updated_at: false
     end
 
-    create(index(:tracks_metrics, [:inserted_at]))
-    create(index(:tracks_metrics, [:track_id]))
-    create(index(:tracks_metrics, [:inserted_at, :track_id]))
+    create index(:tracks_metrics, [:inserted_at])
+    create index(:tracks_metrics, [:track_id])
+    create index(:tracks_metrics, [:inserted_at, :track_id])
   end
 
   @spec down() :: any()

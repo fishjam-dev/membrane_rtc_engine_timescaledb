@@ -10,19 +10,19 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
   alias Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics
 
   @type t :: %__MODULE__{
-          id: integer(),
-          peer_id: String.t(),
+          id: integer() | nil,
+          peer_id: String.t() | nil,
+          room_id: String.t() | nil,
           "ice.binding_requests_received": non_neg_integer() | nil,
           "ice.binding_responses_sent": non_neg_integer() | nil,
           "ice.bytes_received": non_neg_integer() | nil,
           "ice.bytes_sent": non_neg_integer() | nil,
           "ice.packets_received": non_neg_integer() | nil,
           "ice.packets_sent": non_neg_integer() | nil,
-          tracks_metrics: [TrackMetrics] | nil,
-          inserted_at: DateTime.t()
+          tracks_metrics: [TrackMetrics.t()] | Ecto.Association.NotLoaded.t(),
+          inserted_at: DateTime.t() | nil
         }
 
-  @primary_key {:id, :id, autogenerate: true}
   schema "peers_metrics" do
     field :peer_id, :string
     field :room_id, :string

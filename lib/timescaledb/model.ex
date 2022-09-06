@@ -45,15 +45,18 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
   """
   @spec remove_outdated_records(module(), non_neg_integer(), String.t()) :: :ok
   def remove_outdated_records(repo, count, interval) do
-    for model <- [PeerMetrics, TrackMetrics] do
-      query = from(p in model, where: p.inserted_at < ago(^count, ^interval))
-      apply(repo, :delete_all, [query])
+    for model <- [TrackMetrics, PeerMetrics] do
+      from(p in model, where: p.inserted_at < ago(^count, ^interval))
+      |> repo.delete_all()
     end
+
+    :ok
   end
 
   defp insert_peer_metrics(repo, peer_metrics) do
-    changeset = PeerMetrics.changeset(%PeerMetrics{}, peer_metrics)
-    apply(repo, :insert, [changeset])
+    %PeerMetrics{}
+    |> PeerMetrics.changeset(peer_metrics)
+    |> repo.insert()
   end
 
   defp update_if_exists(map, key, fun) do
