@@ -6,16 +6,16 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
   @spec up() :: any()
   def up() do
     create table(:peers_metrics, primary_key: {:id, :id, autogenerate: true}) do
-      add(:peer_id, :string, null: false)
-      add(:room_id, :string, null: false)
-      add(:"ice.binding_requests_received", :integer)
-      add(:"ice.binding_responses_sent", :integer)
-      add(:"ice.bytes_received", :integer)
-      add(:"ice.bytes_sent", :integer)
-      add(:"ice.packets_received", :integer)
-      add(:"ice.packets_sent", :integer)
+      add :peer_id, :string, null: false
+      add :room_id, :string, null: false
+      add :"ice.binding_requests_received", :integer
+      add :"ice.binding_responses_sent", :integer
+      add :"ice.bytes_received", :integer
+      add :"ice.bytes_sent", :integer
+      add :"ice.packets_received", :integer
+      add :"ice.packets_sent", :integer
 
-      timestamps(type: :utc_datetime_usec, updated_at: false)
+      timestamps type: :utc_datetime_usec, updated_at: false
     end
 
     create(index(:peers_metrics, [:inserted_at]))
@@ -25,16 +25,16 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
     flush()
 
     create table(:tracks_metrics, primary_key: {:id, :id, autogenerate: true}) do
-      add(:track_id, :string, null: false)
-      add(:peer_metrics_id, references(:peers_metrics))
-      add(:peer_id, :string)
-      add(:"inbound-rtp.encoding", :string)
-      add(:"inbound-rtp.ssrc", :string)
-      add(:"inbound-rtp.bytes_received", :integer)
-      add(:"inbound-rtp.keyframe_request_sent", :integer)
-      add(:"inbound-rtp.packets", :integer)
-      add(:"inbound-rtp.frames", :integer)
-      add(:"inbound-rtp.keyframes", :integer)
+      add :track_id, :string, null: false
+      add :peer_metrics_id, references(:peers_metrics)
+      add :peer_id, :string
+      add :"inbound-rtp.encoding", :string
+      add :"inbound-rtp.ssrc", :string
+      add :"inbound-rtp.bytes_received", :integer
+      add :"inbound-rtp.keyframe_request_sent", :integer
+      add :"inbound-rtp.packets", :integer
+      add :"inbound-rtp.frames", :integer
+      add :"inbound-rtp.keyframes", :integer
 
       timestamps(type: :utc_datetime_usec, updated_at: false)
     end
@@ -46,7 +46,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
 
   @spec down() :: any()
   def down() do
-    drop(table(:peers_metrics))
-    drop(table(:tracks_metrics))
+    drop table(:peers_metrics)
+    drop table(:tracks_metrics)
   end
 end

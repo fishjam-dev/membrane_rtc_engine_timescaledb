@@ -4,5 +4,5 @@
     ".formatter.exs",
     "*.exs"
   ],
-  import_deps: [:ecto]
+  import_deps: [:ecto_sql, :ecto]
 ]

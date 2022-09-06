@@ -33,7 +33,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
     field :"ice.packets_received", :integer
     field :"ice.packets_sent", :integer
 
-    timestamps(type: :utc_datetime_usec, updated_at: false)
+    timestamps type: :utc_datetime_usec, updated_at: false
 
     has_many :tracks_metrics, TrackMetrics
   end

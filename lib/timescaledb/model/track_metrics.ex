@@ -26,19 +26,19 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
 
   @primary_key {:id, :id, autogenerate: true}
   schema "tracks_metrics" do
-    field :track_id, :string
-    field :peer_id, :string
-    field :"inbound-rtp.encoding", :string
-    field :"inbound-rtp.ssrc", :string
-    field :"inbound-rtp.bytes_received", :integer
-    field :"inbound-rtp.keyframe_request_sent", :integer
-    field :"inbound-rtp.packets", :integer
-    field :"inbound-rtp.frames", :integer
-    field :"inbound-rtp.keyframes", :integer
+    field(:track_id, :string)
+    field(:peer_id, :string)
+    field(:"inbound-rtp.encoding", :string)
+    field(:"inbound-rtp.ssrc", :string)
+    field(:"inbound-rtp.bytes_received", :integer)
+    field(:"inbound-rtp.keyframe_request_sent", :integer)
+    field(:"inbound-rtp.packets", :integer)
+    field(:"inbound-rtp.frames", :integer)
+    field(:"inbound-rtp.keyframes", :integer)
 
     timestamps(type: :utc_datetime_usec, updated_at: false)
 
-    belongs_to :peer_metrics, PeerMetrics
+    belongs_to(:peer_metrics, PeerMetrics)
   end
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
