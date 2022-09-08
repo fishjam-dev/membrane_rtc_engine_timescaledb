@@ -33,7 +33,7 @@ where
 
 ## Running tests
 
-To start tests, you have to run `$ docker-compose up` command, to have a running database docker container. To set up the database before tests, run `$ mix ecto.create && mix ecto.migrate` in second terminal window. Tests can be run with `$ mix test --include long_running` command.
+To start tests, you have to run `$ docker-compose up` command, to have a running database docker container. To set up the database before tests, run `$ MIX_ENV=test mix ecto.reset` in second terminal window. Tests can be run with `$ mix test --include long_running` command.
 
 ## Copyright and License
 

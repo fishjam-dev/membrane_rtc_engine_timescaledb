@@ -22,7 +22,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
           peer_id: String.t() | nil,
           peer_metrics_id: integer() | nil,
           peer_metrics: PeerMetrics.t() | Ecto.Association.NotLoaded.t(),
-          inserted_at: DateTime.t()
+          inserted_at: DateTime.t() | nil
         }
 
   schema "tracks_metrics" do

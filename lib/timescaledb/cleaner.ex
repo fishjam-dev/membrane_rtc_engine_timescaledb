@@ -1,7 +1,12 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   @moduledoc """
-  Worker responsible for inserting data to database and deleting data from it.
+  Worker responsible for deleting obsolete records from the database.
   By default started in project application module in supervison tree with params passed in application config.
+  `start/1` and `start_link/1` functions expect keyword list as an argument, with following keys:
+    * `:repo` (required) is a module, that uses `Ecto.Repo`
+    * `:cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups
+    * `:metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
+  Options might be also type of `GenServer.options()`
   """
 
   use GenServer
@@ -27,39 +32,39 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   end
 
   defp do_start(function, options) do
+    if not Keyword.has_key?(options, :repo) do
+      raise ":repo key is required in keyword list passed to #{__MODULE__}.#{function}/1 function, got #{inspect(options)}"
+    end
+
     {reporter_options, gen_server_options} =
       Keyword.split(options, [:repo, :cleanup_interval, :metrics_lifetime])
 
     apply(GenServer, function, [__MODULE__, reporter_options, gen_server_options])
   end
 
-  @spec stop(cleaner()) :: :ok
-  def stop(cleaner) do
-    GenServer.cast(cleaner, :stop)
-  end
-
   @impl true
   def init(opts) do
+    cleanup_interval_ms =
+      Keyword.get(opts, :cleanup_interval, 60 * 60)
+      |> Membrane.Time.seconds()
+      |> Membrane.Time.as_milliseconds()
+
+    metrics_lifetime_s = Keyword.get(opts, :metrics_lifetime, 60 * 60 * 24)
+
     state = %{
       repo: opts[:repo],
-      cleanup_interval_ms:
-        opts[:cleanup_interval] |> Membrane.Time.seconds() |> Membrane.Time.as_milliseconds(),
-      metrics_lifetime: opts[:metrics_lifetime]
+      cleanup_interval_ms: cleanup_interval_ms,
+      metrics_lifetime_s: metrics_lifetime_s
     }
 
-    Process.send_after(self(), :cleanup, state.cleanup_interval_ms)
+    Process.send_after(self(), :cleanup, cleanup_interval_ms)
 
     {:ok, state}
   end
 
   @impl true
-  def handle_cast(:stop, state) do
-    {:stop, :normal, state}
-  end
-
-  @impl true
   def handle_info(:cleanup, state) do
-    Model.remove_outdated_records(state.repo, state.metrics_lifetime, "second")
+    Model.remove_outdated_records(state.repo, state.metrics_lifetime_s, "second")
     Process.send_after(self(), :cleanup, state.cleanup_interval_ms)
     {:noreply, state}
   end

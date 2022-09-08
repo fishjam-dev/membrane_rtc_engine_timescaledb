@@ -1,11 +1,8 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
-  alias Membrane.RTC.Engine.TimescaleDB.{
-    Cleaner,
-    Model,
-    Repo
-  }
+  alias Membrane.RTC.Engine.TimescaleDB.{Cleaner, Model}
+  alias Membrane.RTC.Engine.TimescaleDB.Test.Repo
 
   alias Model.{
     PeerMetrics,
@@ -13,8 +10,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
   }
 
   setup do
-    Ecto.Adapters.SQL.Sandbox.checkout(Repo)
-    :ok
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
   end
 
   describe "Reporter stores" do
@@ -23,8 +19,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
 
       assert Repo.all(PeerMetrics) |> length() == 2
       assert Repo.all(TrackMetrics) |> length() == 3
-
-      Ecto.Adapters.SQL.Sandbox.checkin(Repo)
     end
 
     test "multiple reports in the db" do
@@ -33,8 +27,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
 
       assert Repo.all(PeerMetrics) |> length() == 3
       assert Repo.all(TrackMetrics) |> length() == 4
-
-      Ecto.Adapters.SQL.Sandbox.checkin(Repo)
     end
   end
 
@@ -59,8 +51,6 @@ defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
 
       assert Repo.all(PeerMetrics) |> length() == 1
       assert Repo.all(TrackMetrics) |> length() == 1
-
-      Ecto.Adapters.SQL.Sandbox.checkin(Repo)
     end
   end
 
