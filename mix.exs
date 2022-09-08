@@ -13,6 +13,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: dialyzer(),
+      aliases: aliases(),
 
       # hex
       description: "Template Plugin for Membrane Multimedia Framework",
@@ -78,6 +79,13 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       formatters: ["html"],
       source_ref: "v#{@version}",
       nest_modules_by_prefix: [Membrane.Template]
+    ]
+  end
+
+  defp aliases do
+    [
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"]
     ]
   end
 end

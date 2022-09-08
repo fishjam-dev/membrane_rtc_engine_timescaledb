@@ -1,4 +1,4 @@
-defmodule Membrane.RTC.Engine.TimescaleDB.Repo.Migrations.CreateTables do
+defmodule Membrane.RTC.Engine.TimescaleDB.Test.Repo.Migrations.CreateTables do
   use Ecto.Migration
 
   alias Membrane.RTC.Engine.TimescaleDB.Migrations

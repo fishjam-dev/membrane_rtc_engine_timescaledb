@@ -16,9 +16,9 @@ jobs:
           POSTGRES_DB: membrane_rtc_engine_timescaledb_test  
     steps:
       - checkout
-      - run: mix deps.get
-      - run: mix format --check-formatted
-      - run: mix compile --force --warnings-as-errors
+      - run:
+          name: Ensure priv dir exists
+          command: mkdir -p priv
       - run:
           name: install dockerize
           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
@@ -27,9 +27,16 @@ jobs:
       - run: # wait for database before starting testing
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: mix ecto.create
-      - run: mix ecto.migrate
-      - run: mix test --include long_running
+      - run: mix deps.get
+      - elixir/use_build_cache:
+          env: test
+      - run:
+          name: Ensure native deps are compiled
+          command: mix deps.compile
+      - run: 
+          name: Setup database before tests
+          command: MIX_ENV=test mix ecto.setup
+      - run: mix test --include long_running --warnings-as-errors
 
 workflows:
   version: 2

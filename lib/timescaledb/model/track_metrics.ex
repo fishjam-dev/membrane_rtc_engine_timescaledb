@@ -21,7 +21,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
           "inbound-rtp.keyframes": non_neg_integer() | nil,
           peer_metrics_id: integer() | nil,
           peer_metrics: PeerMetrics.t() | Ecto.Association.NotLoaded.t(),
-          inserted_at: DateTime.t()
+          inserted_at: DateTime.t() | nil
         }
 
   schema "tracks_metrics" do
