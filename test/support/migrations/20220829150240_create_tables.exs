@@ -3,11 +3,13 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Test.Repo.Migrations.CreateTables do
 
   alias Membrane.RTC.Engine.TimescaleDB.Migrations
 
+  @spec up() :: :ok
   def up() do
-    Migrations.up()
+    :ok = Migrations.up()
   end
 
+  @spec down() :: :ok
   def down() do
-    Migrations.down()
+    :ok = Migrations.down()
   end
 end
