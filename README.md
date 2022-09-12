@@ -23,7 +23,7 @@ end
 ## Usage
 
 To use `membrane_rtc_engine_timescaledb`, you have to have: 
- * running PostgresQL database with timescaledb extension
+ * running PostgreSQL database with Timescale extension
  * config for `:membrane_rtc_engine_timescaledb`
  * configured `Ecto` repo in your project
  * `Ecto` migration calling `Membrane.RTC.Engine.TimescaleDB.Migrations.up()` 
