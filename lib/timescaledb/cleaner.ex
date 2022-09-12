@@ -1,7 +1,7 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   @moduledoc """
   Worker responsible for deleting obsolete records from the database.
-  By default started under the application's supervision tree with params passed in the application config.
+  By default started under the application's supervision tree with params passed in `:membreane_rtc_engine_timescaledb` config (params passed in config, used to start worker, are these same, as expected by `start/1` and `start_link/1`)
   `start/1` and `start_link/1` functions expect a keyword list as an argument, with the following keys:
     * `:repo` (required) is a module, that uses `Ecto.Repo`
     * `:cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups

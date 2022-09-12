@@ -22,7 +22,33 @@ end
 
 ## Usage
 
-To use `Membrane.RTC.Engine.TimescaleDB`, put the following line in your `config` file: 
+To use `membrane_rtc_engine_timescaledb`, you have to have: 
+ * running PostgresQL database with timescaledb extension
+ * config for `:membrane_rtc_engine_timescaledb`
+ * configured `Ecto` repo in your project
+ * `Ecto` migration calling `Membrane.RTC.Engine.TimescaleDB.Migrations.up()` 
+
+To create such a migration, execute `$ mix ecto.gen.migration create_rtc_engine_timescaledb_tables`, what will create new migration module, and add there calls to `up/0` and `down/0` from `Membrane.RTC.Engine.TimescaleDB.Migrations`. Your new migration module should look like the example below
+```elixir
+defmodule MyApp.CreateRtcEngineTimescaledbTables do
+  use Ecto.Migration
+
+  alias Membrane.RTC.Engine.TimescaleDB.Migrations
+
+  @spec up() :: :ok
+  def up() do
+    :ok = Migrations.up()
+  end
+
+  @spec down() :: :ok
+  def down() do
+    :ok = Migrations.down()
+  end
+end
+```
+Then, execute `$ mix ecto.migrate` to run the newly created migration.
+
+To set up config for this library, put the following line in your config file: 
 ```elixir
 config :membrane_rtc_engine_timescaledb, repo: MyApp.Repo, cleanup_interval: 60 * 60, metrics_lifetime: 60 * 60 * 24
 ```
