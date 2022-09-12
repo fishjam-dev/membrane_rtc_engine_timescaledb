@@ -1,6 +1,6 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
   @moduledoc """
-  Module providing functionality of performing migrations creating or deleting DB tables, expected by this library to function.
+  Migrations creating DB tables required by this library to function.
   """
 
   alias Membrane.RTC.Engine.TimescaleDB.Migrations

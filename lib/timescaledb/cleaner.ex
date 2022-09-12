@@ -1,12 +1,12 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   @moduledoc """
   Worker responsible for deleting obsolete records from the database.
-  By default started in project application module in supervison tree with params passed in application config.
-  `start/1` and `start_link/1` functions expect keyword list as an argument, with following keys:
+  By default started under the application's supervision tree with params passed in the application config.
+  `start/1` and `start_link/1` functions expect a keyword list as an argument, with the following keys:
     * `:repo` (required) is a module, that uses `Ecto.Repo`
     * `:cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups
     * `:metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
-  Options might be also type of `GenServer.options()`
+  The keyword may also include `GenServer` options, see `t:GenServer.option/0` for reference.
   """
 
   use GenServer
@@ -32,7 +32,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Cleaner do
   end
 
   defp do_start(function, options) do
-    if not Keyword.has_key?(options, :repo) do
+    unless Keyword.has_key?(options, :repo) do
       raise ":repo key is required in keyword list passed to #{__MODULE__}.#{function}/1 function, got #{inspect(options)}"
     end
 
