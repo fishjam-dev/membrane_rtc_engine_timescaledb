@@ -1,18 +1,19 @@
-defmodule Membrane.Template.Mixfile do
+defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
-  @github_url "https://github.com/membraneframework/membrane_template_plugin"
+  @github_url "https://github.com/membraneframework/membrane_rtc_engine_timescaledb"
 
   def project do
     [
-      app: :membrane_template_plugin,
+      app: :membrane_rtc_engine_timescaledb,
       version: @version,
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: dialyzer(),
+      aliases: aliases(),
 
       # hex
       description: "Template Plugin for Membrane Multimedia Framework",
@@ -28,6 +29,7 @@ defmodule Membrane.Template.Mixfile do
 
   def application do
     [
+      mod: {Membrane.RTC.Engine.TimescaleDB.Application, []},
       extra_applications: []
     ]
   end
@@ -37,7 +39,9 @@ defmodule Membrane.Template.Mixfile do
 
   defp deps do
     [
-      {:membrane_core, "~> 0.10.0"},
+      {:ecto_sql, "~> 3.7"},
+      {:postgrex, "~> 0.16"},
+      {:membrane_rtc_engine, "~> 0.5.1"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: :dev, runtime: false}
@@ -75,6 +79,13 @@ defmodule Membrane.Template.Mixfile do
       formatters: ["html"],
       source_ref: "v#{@version}",
       nest_modules_by_prefix: [Membrane.Template]
+    ]
+  end
+
+  defp aliases do
+    [
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"]
     ]
   end
 end

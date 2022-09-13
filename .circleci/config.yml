@@ -2,10 +2,41 @@ version: 2.1
 orbs:
   elixir: membraneframework/elixir@1
 
+jobs:
+  test_with_db:
+    docker:
+      - image: membraneframeworklabs/docker_membrane:latest
+        environment:
+          MIX_ENV: test
+      - image: timescale/timescaledb:2.5.1-pg14
+        command: [-cshared_preload_libraries=timescaledb]
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: membrane_rtc_engine_timescaledb_test  
+    steps:
+      - checkout
+      - run:
+          name: Ensure priv dir exists
+          command: mkdir -p priv
+      - run: # wait for database before starting testing
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: mix deps.get
+      - elixir/use_build_cache:
+          env: test
+      - run:
+          name: Ensure native deps are compiled
+          command: mix deps.compile
+      - run: 
+          name: Setup database before tests
+          command: MIX_ENV=test mix ecto.setup
+      - run: mix test --include long_running --warnings-as-errors
+
 workflows:
   version: 2
   build:
     jobs:
       - elixir/build_test
-      - elixir/test
       - elixir/lint
+      - test_with_db
