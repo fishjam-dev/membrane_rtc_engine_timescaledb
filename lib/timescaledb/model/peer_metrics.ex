@@ -1,6 +1,6 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Model.PeerMetrics do
   @moduledoc """
-  Model representing set of peer metrics from `Membrane.RTC.Engine` metrics report.
+  Model representing a set of peer metrics from `Membrane.RTC.Engine` metrics report.
   """
 
   use Ecto.Schema
