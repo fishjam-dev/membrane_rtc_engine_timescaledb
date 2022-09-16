@@ -1,0 +1,51 @@
+apiVersion: 1
+
+
+datasources:
+  - name: postgres
+    type: postgres
+    url: localhost:5432
+    database: membrane
+    user: membrane
+    secureJsonData:
+      password: membrane
+    jsonData:
+      sslmode: "disable"
+      maxOpenConns: 0         # Grafana v5.4+
+      maxIdleConns: 2         # Grafana v5.4+
+      connMaxLifetime: 14400  # Grafana v5.4+
+      postgresVersion: 1410 # 903=9.3, 904=9.4, 905=9.5, 906=9.6, 1000=10
+
+
+
+
+
+
+# datasources:
+#   - name: postgres
+#     type: postgres
+#     url: localhost:5432
+#     database: membrane
+#     user: membrane
+#     secureJsonData:
+#       password: membrane
+#     jsonData:
+#       sslmode: "disable"
+      
+
+      
+# datasources:
+#   - name: Postgres
+#     type: postgres
+#     url: localhost:5432
+#     database: grafana
+#     user: grafana
+#     secureJsonData:
+#       password: "Password!"
+#     jsonData:
+#       sslmode: "disable" # disable/require/verify-ca/verify-full
+#       maxOpenConns: 0         # Grafana v5.4+
+#       maxIdleConns: 2         # Grafana v5.4+
+#       connMaxLifetime: 14400  # Grafana v5.4+
+#       postgresVersion: 903 # 903=9.3, 904=9.4, 905=9.5, 906=9.6, 1000=10
+#       timescaledb: false
