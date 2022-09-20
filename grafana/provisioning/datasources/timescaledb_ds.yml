@@ -10,6 +10,7 @@ datasources:
     url: localhost:5432
     database: membrane
     user: membrane
+    uid: Y6Fk2pZ4k
     secureJsonData:
       password: 'membrane'
     jsonData:
