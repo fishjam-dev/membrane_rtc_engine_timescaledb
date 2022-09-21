@@ -7,12 +7,12 @@ deleteDatasources:
 datasources:
   - name: Postgres
     type: postgres
-    url: localhost:5432
-    database: membrane
-    user: membrane
+    url: ${DB_URL}
+    database: ${DB_NAME}
+    user: ${DB_USERNAME}
     uid: Y6Fk2pZ4k
     secureJsonData:
-      password: 'membrane'
+      password: ${DB_PASSWORD}
     jsonData:
       sslmode: 'disable' # disable/require/verify-ca/verify-full
       maxOpenConns: 0 # Grafana v5.4+
