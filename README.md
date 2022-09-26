@@ -57,6 +57,18 @@ where
  * `cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups 
  * `metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
 
+## Metrics visualisation with Grafana
+
+Metrics stored in the database using `membrane_rtc_engine_timescaledb` can be simply visualized using Grafana.
+To start the dashboard with RTC Engine metrics, mount configuration files, that are in `grafna/provisioning` to the Grafana docker container.
+Eg. if you have cloned this repository in the `/root` directory, add `-v /root/membrane_rtc_engine_timescaledb/grafana/provisioning:/etc/grafana/provisioning` option to your `$ docker run`. Beyond that, you have also set four environment variables for your docker container
+ * `DB_NAME` - name of the database, that you store your metrics in
+ * `DB_USERNAME` - username used to log into the database
+ * `DB_PASSWORD` - password used to log into the database
+ * `DB_URL` - database URL in the form of `host:port`, eg. `localhost:5432`
+
+If you want to take a look at some examples, see `deploy` step in any of the GitHub workflows in [membrane_videoroom](https://github.com/membraneframework/membrane_videoroom/tree/master/.github/workflows) with [docker-compose.yml](https://github.com/membraneframework/membrane_videoroom/blob/master/docker-compose.yml) file used by it.
+
 ## Running tests
 
 To start tests, you have to run `$ docker-compose up` command, to have a running database docker container. To set up the database before tests, run `$ MIX_ENV=test mix ecto.reset` in second terminal window. Tests can be run with `$ mix test --include long_running` command.
