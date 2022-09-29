@@ -50,12 +50,13 @@ Then, execute `$ mix ecto.migrate` to run the newly created migration.
 
 To set up config for this library, put the following line in your config file: 
 ```elixir
-config :membrane_rtc_engine_timescaledb, repo: MyApp.Repo, cleanup_interval: 60 * 60, metrics_lifetime: 60 * 60 * 24
+config :membrane_rtc_engine_timescaledb, repo: MyApp.Repo, cleanup_interval: 60 * 60, metrics_lifetime: 60 * 60 * 24, do_cleanups: true
 ```
 where 
  * `repo` (required) is a module in your project, that uses `Ecto.Repo`
  * `cleanup_interval` (default: 1 hour) is the number of seconds between database cleanups 
  * `metrics_lifetime` (default: 24 hours) is the number of seconds that must pass from creation before each metric can be deleted during cleanup
+ * `do_cleanups` (default: true) if `false`, then there will be no cleanups (can be used, when `repo` is not initialized and there will be no calls to the database)
 
 ## Running tests
 

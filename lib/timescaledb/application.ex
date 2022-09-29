@@ -10,14 +10,29 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Application do
 
   @impl true
   def start(_start_type, _start_args) do
-    children = [
-      {Membrane.RTC.Engine.TimescaleDB.Cleaner,
-       repo: repo(), cleanup_interval: cleanup_interval(), metrics_lifetime: metrics_lifetime()},
-      {Membrane.RTC.Engine.TimescaleDB.Reporter,
-       repo: repo(), name: Membrane.RTC.Engine.TimescaleDB.Reporter}
-    ]
+    optional_children =
+      if do_cleanups() do
+        [
+          {Membrane.RTC.Engine.TimescaleDB.Cleaner,
+           repo: repo(),
+           cleanup_interval: cleanup_interval(),
+           metrics_lifetime: metrics_lifetime()}
+        ]
+      else
+        []
+      end
+
+    children =
+      [
+        {Membrane.RTC.Engine.TimescaleDB.Reporter,
+         repo: repo(), name: Membrane.RTC.Engine.TimescaleDB.Reporter}
+      ] ++ optional_children
 
     Supervisor.start_link(children, strategy: :one_for_one)
+  end
+
+  defp do_cleanups() do
+    Application.get_env(@app_name, :do_cleanups, true)
   end
 
   defp repo() do
