@@ -3,6 +3,8 @@ defmodule Membrane.RTC.Engine.TimescaleDB.ReleaseHelper do
   Provides functions facilitating releasing a project, that has a dependency to this library
   """
 
+  @app :membrane_rtc_engine_timescaledb
+
   @doc """
   Takes a path to the `priv` directory of this repo (eg. in source code or release) and the target path, where the content of `priv/grafana` subdirectory will be copied.
   """
@@ -29,7 +31,8 @@ defmodule Membrane.RTC.Engine.TimescaleDB.ReleaseHelper do
   """
   @spec project_version() :: String.t()
   def project_version() do
-    Membrane.RTC.Engine.TimescaleDB.Mixfile.project()
-    |> Keyword.fetch!(:version)
+    Application.spec(@app)
+    |> Keyword.fetch!(:vsn)
+    |> to_string()
   end
 end
