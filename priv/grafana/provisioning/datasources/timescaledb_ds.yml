@@ -19,4 +19,4 @@ datasources:
       maxIdleConns: 2
       connMaxLifetime: 14400
       postgresVersion: 1000
-      timescaledb: false
+      timescaledb: true
