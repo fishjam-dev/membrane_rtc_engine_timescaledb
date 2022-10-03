@@ -6,7 +6,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.GrafanaHelper do
   @app :membrane_rtc_engine_timescaledb
 
   @doc """
-  Takes a path to the `priv` directory of this repo (eg. in source code or release) and the target path, where the content of `priv/grafana` subdirectory will be copied.
+  Takes the target path, where the content from `priv/grafana` will be copied.
   """
   @spec cp_grafana_directory(String.t()) :: :ok
   def cp_grafana_directory(target_path) do
