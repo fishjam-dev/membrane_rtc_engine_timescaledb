@@ -90,7 +90,7 @@ services:
           nocopy: true
 ```
 
-If you want to put the content of `priv/grafana/directory` in different than default location, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1` in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15) 
+If you want to put the content of `priv/grafana/provisioning` in the different than default location in the image of your Elixir project, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1` in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15) 
 
 Beyond that, you have to set the following environment variables for your docker container
  * `DB_NAME` - name of the database, that you store your metrics in
