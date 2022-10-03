@@ -60,17 +60,45 @@ where
 ## Metrics visualisation with Grafana
 
 Metrics stored in the database using `membrane_rtc_engine_timescaledb` can be simply visualized using Grafana.
-To start the dashboard with RTC Engine metrics, pass volume with the content of `priv/grafana/provisioning` to the Grafana docker container.
-You can see, how it is done in this [docker-compose.yml](https://github.com/membraneframework/membrane_videoroom/blob/metrics-visualisation/docker-compose.yml)
+To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files placed in `priv/grafana/provisioning` and pass it to the Grafana container. 
+If you will release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained in the Docker image. 
+To create a volume containing `priv/grafana/provisioning`, declare it in your `docker-compose.yml` 
+```yml
+volumes: 
+  grafana-provisioning:
+```
+and add it to the container with the Elixir project and to the Grafana container
+```yml
+services: 
+  ...
+  elixir_project:
+    ...
+    volumes: 
+      - type: volume
+        source: grafana-provisioning
+        target: <path to grafana/provisioning in the related Docker image>
+  grafana:
+    ...
+    depends_on: 
+      - elixir_project
+    volumes:
+      - type: volume
+        source: grafana-provisioning
+        target: /etc/grafana/provisioning
+        read_only: true
+        volume:
+          nocopy: true
+```
 
-***NOTE 1*** If you will release a project with dependency to `membrane_rtc_engine_timescaledb`, content of `priv/grafana/provisioning` directory will be contained in the image 
-***NOTE 2*** In the example `docker-compose.yml` above, the `videoroom` container doesn't contain Grafana configs from `priv/grafana/provisioning` in the default location. Take a look on the `releases` value in this [mix.exs](https://github.com/membraneframework/membrane_videoroom/blob/a627f44e5d5f95f2310c2fec5fde22bd5632a189/mix.exs#L15), to see, how to copy Grafana configs to your custom directory.
+If you want to put the content of `priv/grafana/directory` in different than default location, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1` in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15) 
 
 Beyond that, you have to set the following environment variables for your docker container
  * `DB_NAME` - name of the database, that you store your metrics in
  * `DB_USERNAME` - username used to log into the database
  * `DB_PASSWORD` - password used to log into the database
  * `DB_URL` - database URL in the form of `host:port`, eg. `localhost:5432`
+
+To see an example, of how you can pass volumes and environment variables to the Docker containers, see `membrane_videoroom` [docker-compose.yml](https://github.com/membraneframework/membrane_videoroom/blob/metrics-visualisation/docker-compose.yml)
 
 ## Running tests
 
