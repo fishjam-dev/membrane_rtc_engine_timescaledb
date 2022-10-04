@@ -60,8 +60,8 @@ where
 ## Metrics visualisation with Grafana
 
 Metrics stored in the database using `membrane_rtc_engine_timescaledb` can be simply visualized using Grafana.
-To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files placed in `priv/grafana/provisioning` and pass it to the Grafana container. 
-If you will release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained in the Docker image. 
+To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files that are placed in `priv/grafana/provisioning` and mount it in the Grafana container at the default location: `/etc/grafana/provisioning`. 
+If you release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained in the Docker image. 
 To create a volume containing `priv/grafana/provisioning`, declare it in your `docker-compose.yml` 
 ```yml
 volumes: 
