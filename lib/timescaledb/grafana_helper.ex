@@ -11,7 +11,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.GrafanaHelper do
   @spec cp_grafana_directory(String.t()) :: :ok
   def cp_grafana_directory(target_path) do
     target_path = Path.join(target_path, "grafana")
-    grafana_path = Application.app_dir(@app) |> Path.join("priv/grafana")
+    grafana_path = Application.app_dir(@app, ["priv", "grafana"])
 
     File.mkdir_p(target_path)
     File.cp_r!(grafana_path, target_path)
