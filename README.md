@@ -60,14 +60,16 @@ where
 ## Metrics visualisation with Grafana
 
 Metrics stored in the database using `membrane_rtc_engine_timescaledb` can be simply visualized using Grafana.
-To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files that are placed in `priv/grafana/provisioning` and mount it in the Grafana container at the default location: `/etc/grafana/provisioning`. 
-If you release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained in the Docker image. 
-To create a volume containing `priv/grafana/provisioning`, declare it in your `docker-compose.yml` 
+To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files taken from `priv/grafana/provisioning` and mount it in the Grafana container at the default location: `/etc/grafana/provisioning`. 
+If you release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained inside a assembled release, in the `lib/membrane_rtc_engine_timescaledb-0.1.0` directory. 
+If you want to have Grafana configuration files in a different path, that does not contain a library version, that can change over time, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1`, in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15).
+
+You can create a volume containing `priv/grafana/provisioning`, by declaring it in your `docker-compose.yml` 
 ```yml
 volumes: 
   grafana-provisioning:
 ```
-and add it to the container with the Elixir project and to the Grafana container
+and adding it to the container with the Elixir project and to the Grafana container
 ```yml
 services: 
   ...
@@ -89,8 +91,6 @@ services:
         volume:
           nocopy: true
 ```
-
-If you want to put the content of `priv/grafana/provisioning` in the different than default location in the image of your Elixir project, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1` in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15) 
 
 Beyond that, you have to set the following environment variables for your docker container
  * `DB_NAME` - name of the database, that you store your metrics in
