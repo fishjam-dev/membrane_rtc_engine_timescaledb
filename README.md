@@ -61,9 +61,30 @@ where
 
 Metrics stored in the database using `membrane_rtc_engine_timescaledb` can be simply visualized using Grafana.
 To start the dashboard with RTC Engine metrics, create a volume with Grafana configuration files taken from `priv/grafana/provisioning` and mount it in the Grafana container at the default location: `/etc/grafana/provisioning`. 
-If you release an Elixir project with dependency to `membrane_rtc_engine_timescaledb`, `priv/grafana/provisioning` will be contained inside a assembled release, in the `lib/membrane_rtc_engine_timescaledb-0.1.0` directory. 
-If you want to have Grafana configuration files in a different path, that does not contain a library version, that can change over time, use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1`, in one of the release steps in `mix.exs`, as it is done [there](https://github.com/membraneframework/membrane_videoroom/blob/dac1bf06d7130116da038f3b33ff4dc4641a18c6/mix.exs#L15). 
-For example, to have `grafana/provisioning` in the `/app` directory in the Docker image of your Elixir project, pass `release.path` to `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1`, where `release` is struct received and returned by release steps.
+When assembling an Elixir release with a dependency on `membrane_rtc_engine_timescaledb` the config files will be put in `lib/membrane_rtc_engine_timescaledb-0.1.0/priv/grafana/provisioning` directory inside the release. 
+If you want to put them in a different location (e.g. one that doesn't contain the library version, possibly changing over time), create an additional release step in `mix.exs` and use `Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory/1` inside, like in the example below:
+```elixir
+defmodule Example.MixProject do
+  use Mix.Project
+
+  def project do
+    [
+      project: :example_project,
+      ...
+      releases: [
+        example_project: [
+          steps: [:assemble, &cp_grafana_config/1]
+        ]
+      ]
+    ]
+  end
+
+  defp cp_grafana_config(release) do
+    Membrane.RTC.Engine.TimescaleDB.GrafanaHelper.cp_grafana_directory(release.path)
+    release
+  end
+end
+```
 
 You can create a volume containing `priv/grafana/provisioning`, by declaring it in your `docker-compose.yml` 
 ```yml
