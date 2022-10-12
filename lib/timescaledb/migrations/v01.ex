@@ -30,6 +30,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
       add :peer_metrics_id,
           references(:peers_metrics, on_delete: :delete_all, on_update: :update_all)
 
+      add :peer_id, :string
       add :"inbound-rtp.encoding", :string
       add :"inbound-rtp.ssrc", :string
       add :"inbound-rtp.bytes_received", :integer

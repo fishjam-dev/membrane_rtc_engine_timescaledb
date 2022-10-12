@@ -1,0 +1,22 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: Postgres
+    orgId: 1
+
+datasources:
+  - name: Postgres
+    type: postgres
+    url: ${DB_URL}
+    database: ${DB_NAME}
+    user: ${DB_USERNAME}
+    uid: Y6Fk2pZ4k
+    secureJsonData:
+      password: ${DB_PASSWORD}
+    jsonData:
+      sslmode: 'disable'
+      maxOpenConns: 0
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+      postgresVersion: 1000
+      timescaledb: true

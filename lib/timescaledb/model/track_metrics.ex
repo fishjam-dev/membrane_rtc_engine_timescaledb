@@ -19,6 +19,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
           "inbound-rtp.packets": non_neg_integer() | nil,
           "inbound-rtp.frames": non_neg_integer() | nil,
           "inbound-rtp.keyframes": non_neg_integer() | nil,
+          peer_id: String.t() | nil,
           peer_metrics_id: integer() | nil,
           peer_metrics: PeerMetrics.t() | Ecto.Association.NotLoaded.t(),
           inserted_at: DateTime.t() | nil
@@ -26,6 +27,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
 
   schema "tracks_metrics" do
     field :track_id, :string
+    field :peer_id, :string
     field :"inbound-rtp.encoding", :string
     field :"inbound-rtp.ssrc", :string
     field :"inbound-rtp.bytes_received", :integer
@@ -46,6 +48,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
     casted_fields =
       required_fields ++
         [
+          :peer_id,
           :peer_metrics_id,
           :"inbound-rtp.encoding",
           :"inbound-rtp.ssrc",
