@@ -2,7 +2,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
-  @github_url "https://github.com/membraneframework/membrane_rtc_engine_timescaledb"
+  @github_url "https://github.com/jellyfish-dev/membrane_rtc_engine_timescaledb"
 
   def project do
     [
@@ -22,7 +22,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       # docs
       name: "Membrane Template plugin",
       source_url: @github_url,
-      homepage_url: "https://membraneframework.org",
+      homepage_url: "https://membrane.stream",
       docs: docs()
     ]
   end
@@ -67,7 +67,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       licenses: ["Apache-2.0"],
       links: %{
         "GitHub" => @github_url,
-        "Membrane Framework Homepage" => "https://membraneframework.org"
+        "Membrane Framework Homepage" => "https://membrane.stream"
       }
     ]
   end

@@ -2,7 +2,7 @@
 
 [![Hex.pm](https://img.shields.io/hexpm/v/membrane_rtc_engine_timescaledb.svg)](https://hex.pm/packages/membrane_rtc_engine_timescaledb)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/membrane_rtc_engine_timescaledb)
-[![CircleCI](https://circleci.com/gh/membraneframework/membrane_rtc_engine_timescaledb.svg?style=svg)](https://circleci.com/gh/membraneframework/membrane_rtc_engine_timescaledb)
+[![CircleCI](https://circleci.com/gh/jellyfish-dev/membrane_rtc_engine_timescaledb.svg?style=svg)](https://circleci.com/gh/jellyfish-dev/membrane_rtc_engine_timescaledb)
 
 This repository contains functions, that allows storing `Membrane.RTC.Engine` metrics reports in a database.
 
