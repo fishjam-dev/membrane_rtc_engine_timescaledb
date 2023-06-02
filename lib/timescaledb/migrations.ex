@@ -53,6 +53,10 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
 
   @type version_spec() :: [version: pos_integer()] | [versions: Range.t()]
 
+  @deprecated "Use up/1 with explicit version(s)"
+  @spec up() :: :ok
+  def up(), do: up(version: 1)
+
   @spec up(version_spec()) :: :ok
   def up(version: version)
       when is_integer(version) and version >= 1 and version <= @latest_migration do
@@ -62,6 +66,10 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
   def up(versions: _from.._to//1 = versions) do
     change(versions, :up)
   end
+
+  @deprecated "Use down/1 with explicit version(s)"
+  @spec down() :: :ok
+  def down(), do: down(version: 1)
 
   @spec down(version_spec()) :: :ok
   def down(version: version)
