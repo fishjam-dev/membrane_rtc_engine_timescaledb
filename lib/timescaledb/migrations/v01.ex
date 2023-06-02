@@ -51,9 +51,15 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
 
   @spec down() :: :ok
   def down() do
-    drop table(:peers_metrics)
+    drop index(:tracks_metrics, [:inserted_at])
+    drop index(:tracks_metrics, [:track_id])
+    drop index(:tracks_metrics, [:inserted_at, :track_id])
     drop table(:tracks_metrics)
 
+    drop index(:peers_metrics, [:inserted_at])
+    drop index(:peers_metrics, [:peer_id])
+    drop index(:peers_metrics, [:inserted_at, :peer_id])
+    drop table(:peers_metrics)
     :ok
   end
 end
