@@ -13,7 +13,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: membrane_rtc_engine_timescaledb_test  
+          POSTGRES_DB: membrane_rtc_engine_timescaledb_test
     steps:
       - checkout
       - run:
@@ -28,9 +28,12 @@ jobs:
       - run:
           name: Ensure native deps are compiled
           command: mix deps.compile
-      - run: 
+      - run:
           name: Setup database before tests
           command: MIX_ENV=test mix ecto.setup
+      - run:
+          name: Ensure migrations are rollbackable
+          command: MIX_ENV=test mix ecto.rollback --all && MIX_ENV=test mix ecto.migrate
       - run: mix test --include long_running --warnings-as-errors
 
 workflows:
