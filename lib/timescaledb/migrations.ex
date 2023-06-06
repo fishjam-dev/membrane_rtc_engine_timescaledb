@@ -11,10 +11,11 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
   @moduledoc """
   Migrations creating DB tables required by this library to function.
   To execute migrations, run `#{__MODULE__}.up(versions: 1..2)` or `#{__MODULE__}.up(version: 2)`.
-  To undo them and drop tables, run `#{__MODULE__}.down(versions: 1..2)` or `#{__MODULE__}.down(version: 2)`.
+  To undo them, run `#{__MODULE__}.down(versions: 1..2)` or `#{__MODULE__}.down(version: 2)` accordingly.
   Currently, the latest migrations version is `#{@latest_migration}`
   Suggested way of using functions from this module, is to create a migration module in your own
-  project and call them there, e.g.
+  project and call them there. Remember, that versions passed to `down` should match ones passed to
+  `up`. Here's an example:
 
   ```elixir
   defmodule MyApp.CreateRtcEngineTimescaledbTables do
