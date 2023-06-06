@@ -10,7 +10,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model do
   @doc """
   Takes `Membrane.RTC.Engine.Metrics.rtc_engine_report()` and puts it to database.
   """
-  @spec insert_report(module(), Membrane.RTC.Engine.Metrics.rtc_engine_report()) :: :ok
+  @spec insert_report(module(), Membrane.RTC.Engine.TimescaleDB.report()) :: :ok
   def insert_report(repo, report) do
     for {{:room_id, room_id}, room_report} <- report do
       for {{:peer_id, peer_id}, peer_report} <- room_report do

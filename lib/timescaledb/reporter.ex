@@ -26,7 +26,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Reporter do
     apply(GenServer, function, [__MODULE__, repo, gen_server_options])
   end
 
-  @spec store_report(reporter(), Membrane.RTC.Engine.Metrics.rtc_engine_report()) :: :ok
+  @spec store_report(reporter(), Membrane.RTC.Engine.TimescaleDB.report()) :: :ok
   def store_report(reporter \\ __MODULE__, report) do
     GenServer.cast(reporter, {:store_report, report})
   end
