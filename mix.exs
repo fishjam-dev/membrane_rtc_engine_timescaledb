@@ -1,7 +1,7 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @github_url "https://github.com/jellyfish-dev/membrane_rtc_engine_timescaledb"
 
   def project do
@@ -16,11 +16,11 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       aliases: aliases(),
 
       # hex
-      description: "Template Plugin for Membrane Multimedia Framework",
+      description: "Plugin storing Membrane RTC Engine metrics in TimescaleDB",
       package: package(),
 
       # docs
-      name: "Membrane Template plugin",
+      name: "Membrane RTC Engine TimescaleDB plugin",
       source_url: @github_url,
       homepage_url: "https://membrane.stream",
       docs: docs()
@@ -78,7 +78,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Mixfile do
       extras: ["README.md", "LICENSE"],
       formatters: ["html"],
       source_ref: "v#{@version}",
-      nest_modules_by_prefix: [Membrane.Template]
+      nest_modules_by_prefix: [Membrane.RTC.Engine.TimescaleDB]
     ]
   end
 
