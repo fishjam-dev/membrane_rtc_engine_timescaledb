@@ -58,7 +58,16 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
   @spec up() :: :ok
   def up(), do: up(version: 1)
 
+  @doc """
+  Applies Ecto DB migrations to a specified version. Should be called from `up` callback of
+  Ecto migration.
+
+  Accepts either `[version: version]` to run a single migration from previous to `version`
+  or `[versions: from..to]` that migrates from `from - 1` to `to` version.
+  """
   @spec up(version_spec()) :: :ok
+  def up(version_keyword)
+
   def up(version: version)
       when is_integer(version) and version >= 1 and version <= @latest_migration do
     change(version..version, :up)
@@ -72,7 +81,16 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations do
   @spec down() :: :ok
   def down(), do: down(version: 1)
 
+  @doc """
+  Reverts Ecto DB migrations from a specified version. Should be called from `down` callback of
+  Ecto migration.
+
+  Accepts either `[version: version]` to revert a single migration to `version`
+  or `[versions: from..to]` that reverts migrations from passed range leaving DB at version `from - 1`
+  """
   @spec down(version_spec()) :: :ok
+  def down(version_keyword)
+
   def down(version: version)
       when is_integer(version) and version >= 1 and version <= @latest_migration do
     change(version..version, :down)
