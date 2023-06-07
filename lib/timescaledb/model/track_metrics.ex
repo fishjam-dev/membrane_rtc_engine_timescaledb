@@ -12,7 +12,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Model.TrackMetrics do
   @type t :: %__MODULE__{
           id: integer() | nil,
           track_id: String.t() | nil,
-          "inbound-rtp.encoding": non_neg_integer() | nil,
+          "inbound-rtp.encoding": String.t() | nil,
           "inbound-rtp.ssrc": non_neg_integer() | nil,
           "inbound-rtp.bytes_received": non_neg_integer() | nil,
           "inbound-rtp.keyframe_request_sent": non_neg_integer() | nil,

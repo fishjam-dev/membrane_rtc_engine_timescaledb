@@ -1,9 +1,11 @@
 defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
   @moduledoc false
 
+  @behaviour Membrane.RTC.Engine.TimescaleDB.Migration
+
   use Ecto.Migration
 
-  @spec up() :: :ok
+  @impl true
   def up() do
     create table(:peers_metrics) do
       add :peer_id, :string, null: false
@@ -49,11 +51,17 @@ defmodule Membrane.RTC.Engine.TimescaleDB.Migrations.V01 do
     :ok
   end
 
-  @spec down() :: :ok
+  @impl true
   def down() do
-    drop table(:peers_metrics)
+    drop index(:tracks_metrics, [:inserted_at])
+    drop index(:tracks_metrics, [:track_id])
+    drop index(:tracks_metrics, [:inserted_at, :track_id])
     drop table(:tracks_metrics)
 
+    drop index(:peers_metrics, [:inserted_at])
+    drop index(:peers_metrics, [:peer_id])
+    drop index(:peers_metrics, [:inserted_at, :peer_id])
+    drop table(:peers_metrics)
     :ok
   end
 end

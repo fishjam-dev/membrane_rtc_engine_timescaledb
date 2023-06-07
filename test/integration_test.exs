@@ -32,7 +32,7 @@ defmodule Membrane.RTC.Engine.TimescaleDB.IntegrationTest do
 
   describe "Cleaner removes" do
     @tag :long_running
-    test "old vales from the db" do
+    test "old values from the db" do
       {:ok, cleaner} =
         Cleaner.start_link(cleanup_interval: 1, metrics_lifetime: 4, repo: Repo, name: Cleaner)
 
